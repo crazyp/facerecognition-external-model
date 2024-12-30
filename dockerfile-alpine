@@ -5,7 +5,13 @@ COPY Makefile /app/
 RUN apk update \
     && apk add py3-pip py3-flask py3-numpy py3-gunicorn bzip2 cmake g++ make wget \
     && make -C /app/ download-models
-RUN apk add dlib php82-pdlib --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+RUN apk add dlib --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+RUN apk add php82-common --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+RUN apk add musl --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+RUN apk add libgcc --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+RUN apk add libstdc++ --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+
+RUN apk add php82-pdlib --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
 COPY facerecognition-external-model.py /app/
 COPY gunicorn_config.py /app/
 
