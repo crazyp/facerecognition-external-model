@@ -3,7 +3,7 @@ FROM alpine:edge
 COPY Makefile /app/
 
 RUN apk update \
-    && apk add py3-pip py3-flask py-3numpy py3-gunicorn bzip2 cmake g++ make wget \
+    && apk add py3-pip py3-flask py3-numpy py3-gunicorn bzip2 cmake g++ make wget \
     && make -C /app/ download-models
 RUN apk add dlib php82-pdlib --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
 COPY facerecognition-external-model.py /app/
