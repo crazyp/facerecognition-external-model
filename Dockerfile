@@ -1,21 +1,14 @@
-FROM python:slim AS builder
+FROM alpine:edge
 
 COPY Makefile /app/
 
-RUN apt update -yq \
-    && apt install -yq bzip2 cmake g++ make wget \
-    && pip wheel -w /app/ dlib \
+RUN apk update \
+    && apk add py3-pip py3-flask py3-numpy py3-gunicorn bzip2 cmake g++ make wget \
     && make -C /app/ download-models
 
-FROM python:slim
-
-COPY --from=builder /app/dlib*.whl /tmp/
-COPY --from=builder /app/vendor/ /app/vendor/
-
-RUN pip install flask numpy gunicorn \
-    && pip install --no-index -f /tmp/ dlib \
-    && rm /tmp/dlib*.whl
-
+RUN apk add dlib --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+RUN apk add php82-common --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+RUN apk add php82-pdlib --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
 COPY facerecognition-external-model.py /app/
 COPY gunicorn_config.py /app/
 
